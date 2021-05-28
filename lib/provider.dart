@@ -119,6 +119,8 @@ class MainProvider with ChangeNotifier {
   String exchangeRateFor(String s) {
     if (rates == null) return "-";
     var json = rates.toJson();
-    return "${(1 / json.values.elementAt(json.keys.toList().indexOf(s))).toStringAsFixed(3)}";
+    var index = json.keys.toList().indexOf(s);
+
+    return "${(_baseRateIndex == 0 ? 1 / rates.toJson().values.elementAt(index) : rates.toJson().values.elementAt(_baseRateIndex) / rates.toJson().values.elementAt(index)).toStringAsFixed(3)}";
   }
 }
