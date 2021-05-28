@@ -75,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     controller: sumController,
                     onChanged: (val) =>
                         provider.setSum = int.tryParse(val) ?? 1,
