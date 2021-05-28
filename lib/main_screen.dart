@@ -2,7 +2,6 @@ import 'package:current_exchange/chart_screen.dart';
 import 'package:current_exchange/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -45,11 +44,11 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  height: 100,
+                  height: 120,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Текущая валюта"),
+                      Text("Возможные коды валют"),
                       Expanded(
                         child: CupertinoPicker.builder(
                           selectionOverlay:
@@ -60,7 +59,6 @@ class _MainScreenState extends State<MainScreen> {
                           backgroundColor: Colors.white,
                           itemExtent: 25,
                           onSelectedItemChanged: (index) {
-                            provider.setBaseRateIndex = index;
                           },
                           itemBuilder: (BuildContext context, int index) {
                             return Text(
@@ -75,13 +73,10 @@ class _MainScreenState extends State<MainScreen> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextField(
-                    keyboardType: TextInputType.number,
                     controller: sumController,
-                    onChanged: (val) =>
-                        provider.setSum = int.tryParse(val) ?? 1,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
+                    onChanged: (val) {
+                      provider.setText = val;
+                    },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -92,19 +87,9 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: provider.rates?.toJson()?.length ?? 0,
-                    shrinkWrap: true,
-                    itemBuilder: (ctx, index) {
-                      return ListTile(
-                        title: Text(""),
-                        subtitle: Text(
-                            "${provider.sum} ${provider.baseTitle} = ${provider.exchangeRate(index).toStringAsFixed(3)} ${provider.exchangeTitle(index)}"),
-                      );
-                    },
-                  ),
-                ),
+                if (provider.exchanginRateIndex != null)
+                  Text(
+                      "${provider.sum} ${provider.baseTitle} = ${provider.selectedExchangeRate.toStringAsFixed(3)} ${provider.selectedExchangeTitle}"),
               ],
             ),
           );
